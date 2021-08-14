@@ -15,7 +15,7 @@ class App extends Component {
                 minutes: this.timeFromStorage.minutes || 0,
                 seconds: this.timeFromStorage.seconds || 0
             },
-            isCompleted: false
+            isCompleted: this.timeFromStorage.hours === 0
         };
         this.intervalId = null;
     }
@@ -24,20 +24,22 @@ class App extends Component {
         fetch('data.json')
             .then(response => { response.json()
                 .then(data => { this.setState({ data }); })
+                .then(() => {
+                    this.setState({ time: {
+                            hours: this.timeFromStorage.hours || this.state.data.duration_hour || 0,
+                            minutes: this.timeFromStorage.minutes || 0,
+                            seconds: this.timeFromStorage.seconds || 0
+                        }}, () => {
+                        this.intervalId = setInterval(() => this.startTimer(), 1000);
+                    });
+                })
                 .catch(() => this.setState({ data: { duration_hour: 0, url: '', cash_value: 0 } }));
-            });
-
-        this.setState({ time: {
-                hours: this.timeFromStorage.hours || this.state.data.duration_hour || 0,
-                minutes: this.timeFromStorage.minutes || 0,
-                seconds: this.timeFromStorage.seconds || 0
-            }}, () => {
-                this.intervalId = setInterval(() => this.startTimer(), 1000);
             });
     };
     startTimer = () => {
         if (this.state.time.hours === 0 && this.state.time.minutes === 0 && this.state.time.seconds === 0) {
             this.setState({ isCompleted: true });
+            clearInterval(this.intervalId);
         } else if (this.state.time.minutes === 0 && this.state.time.seconds === 0) {
             this.setState({
                 time: {

@@ -104,6 +104,7 @@ describe("App.js", () => {
         it('should change time state correctly when startTimer function did call', () => {
             const instance = wrapper.instance();
 
+            wrapper.setState({ time: { hours: 0, minutes: 0, seconds: 0 } });
             instance.startTimer();
 
             expect(instance.state.isCompleted).toBeTruthy();
