@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
+import { useEffect, useState } from 'react';
 import './style.scss';
+import image from './assets/images/top_image_scale_1x.png';
+import imageRetina from './assets/images/top_image_scale_2x.png';
 
 function App() {
     const [data, setData]=useState({});
@@ -37,9 +38,8 @@ function App() {
     };
     const addPad = data => data.toString().padStart(2, 0);
     const readFile = () => {
-        fetch('/src/data.json')
-            .then(response => response.json())
-            .then(data => {
+        import('./data')
+            .then(({ data }) => {
                 setData(data);
             })
             .catch(() => setData({ duration_hour: 0, url: '', cash_value: 0 }));
@@ -54,7 +54,6 @@ function App() {
             minutes: timeFromStorage.minutes || 0,
             seconds: timeFromStorage.seconds || 0
         });
-        setCountdownStatus(time.hours === 0);
     }, [data]);
     useEffect(() => {
         let intervalId = null;
@@ -74,8 +73,8 @@ function App() {
                 {!isCompleted &&
                     <div className="description">
                         <img
-                            src="/src/assets/images/top_image_scale_1x.png"
-                            srcSet="/src/assets/images/top_image_scale_1x.png 1x, /src/assets/images/top_image_scale_2x.png 2x"
+                            src={image}
+                            srcSet={`${image} 1x, ${imageRetina} 2x`}
                             alt="top-image"
                         />
                         <p>Get your free £{data.cash_value || 0} now</p>
@@ -101,6 +100,6 @@ function App() {
             </section>
         </div>
     );
-}
+};
 
-ReactDOM.render(<App />, document.getElementById('root'));
+export default App;
