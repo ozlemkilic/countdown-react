@@ -6,6 +6,7 @@ import image2x from './assets/images/top_image_scale_2x.png';
 class App extends Component {
     constructor(props) {
         super(props);
+
         this.timeFromStorage = JSON.parse(window.localStorage.getItem('time')) || {};
         this.state = {
             data: {},
@@ -32,7 +33,7 @@ class App extends Component {
                 seconds: this.timeFromStorage.seconds || 0
             }}, () => {
                 this.intervalId = setInterval(() => this.startTimer(), 1000);
-            })
+            });
     };
     startTimer = () => {
         if (this.state.time.hours === 0 && this.state.time.minutes === 0 && this.state.time.seconds === 0) {
