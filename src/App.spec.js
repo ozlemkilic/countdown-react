@@ -9,21 +9,26 @@ describe("App.js", () => {
         "cash_value": 10
     };
     const unMockedFetch = global.fetch;
+    const mockedFetch = () =>
+        Promise.resolve({
+            json: () => Promise.resolve(defaultData)
+        });
     let wrapper;
 
     beforeAll(() => {
-        global.fetch = () =>
-            Promise.resolve({
-                json: () => Promise.resolve(defaultData)
-            });
-    })
+        global.fetch = mockedFetch;
+    });
 
     afterAll(() => {
         global.fetch = unMockedFetch;
-    })
+    });
 
     beforeEach(() => {
         wrapper = shallow(<App />);
+    });
+
+    afterEach(() => {
+        wrapper.unmount();
     });
 
     it('should render', () => {
@@ -74,7 +79,7 @@ describe("App.js", () => {
         });
     });
 
-    describe('Mounting', () => {
+    describe('Life cycles', () => {
         it('should call readFile method when component did mount', () => {
             const instance = wrapper.instance();
 
@@ -93,12 +98,28 @@ describe("App.js", () => {
     });
 
     describe('Functions', () => {
-        it('should change time and data state when readFile function did call', async () => {
+        it('should change data state when readFile function did call', async () => {
             const instance = wrapper.instance();
 
             await instance.readFile();
 
             expect(instance.state.data).toMatchObject(defaultData);
+        });
+
+        it('should reject readFile method when component did mount', async () => {
+            global.fetch = unMockedFetch;
+            global.fetch = () =>
+                Promise.resolve({
+                    json: () => Promise.resolve(undefined)
+                });
+            const rejectedWrapper = await shallow(<App />);
+            const instance = rejectedWrapper.instance();
+
+            await instance.readFile();
+
+            expect(instance.state.data).toBe(undefined);
+
+            global.fetch = mockedFetch;
         });
 
         it('should change time state correctly when startTimer function did call', () => {
