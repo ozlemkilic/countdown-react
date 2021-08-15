@@ -23,8 +23,8 @@ class App extends Component {
     readFile = () => {
         fetch('data.json')
             .then(response => { response.json()
-                .then(data => { this.setState({ data }); })
-                .then(() => {
+                .then(data => {
+                    this.setState({ data });
                     this.setState({ time: {
                             hours: this.timeFromStorage.hours || this.state.data.duration_hour || 0,
                             minutes: this.timeFromStorage.minutes || 0,
@@ -95,17 +95,17 @@ class App extends Component {
                     <div className="duration">
                         <div className="hours">
                             <p>{ this.addPad(this.state.time.hours) }</p>
-                            <span className="duration-text">Hours</span>
+                            <small className="duration-text">Hours</small>
                         </div>
                         <span>:</span>
                         <div className="minutes">
                             <p>{ this.addPad(this.state.time.minutes) }</p>
-                            <span className="duration-text">Minutes</span>
+                            <small className="duration-text">Minutes</small>
                         </div>
                         <span>:</span>
                         <div className="seconds">
                             <p>{ this.addPad(this.state.time.seconds) }</p>
-                            <span className="duration-text">Seconds</span>
+                            <small className="duration-text">Seconds</small>
                         </div>
                     </div>
                     {!this.state.isCompleted && <a href={this.state.data.url || ''} target="_blank">Opt-in</a>}

@@ -40,7 +40,7 @@ describe("App.js", () => {
             expect(wrapper.find('.description').length).toEqual(1);
         });
 
-        it('should have not a description area', async () => {
+        it('should have not a description area if countdown is completed', async () => {
             wrapper.setState({ isCompleted: true });
 
             expect(wrapper.find('.description').exists()).toBeFalsy();
@@ -50,13 +50,13 @@ describe("App.js", () => {
             expect(wrapper.find('a').length).toEqual(1);
         });
 
-        it('should have not `a` tag', async () => {
+        it('should have not `a` tag if countdown is completed', async () => {
             wrapper.setState({ isCompleted: true });
 
             expect(wrapper.find('a').exists()).toBeFalsy();
         });
 
-        it('should have correct url', async () => {
+        it('should have `a` tag with correct url', async () => {
             const url = 'www.googgle.com';
 
             wrapper.setState({ data: { url } });
@@ -64,13 +64,13 @@ describe("App.js", () => {
             expect(wrapper.find('a').props().href).toEqual(url);
         });
 
-        it('should have correct offer text', async () => {
+        it('should have correct offer text with cache value', async () => {
             wrapper.setState({ data: { cash_value: 10 } });
 
             expect(wrapper.find('.description p').text()).toContain('10');
         });
 
-        it('should have correct duration', async () => {
+        it('should have correct duration in countdown', async () => {
             wrapper.setState({ time: { hours: 1, minutes: 35, seconds: 20 } });
 
             expect(wrapper.find('.hours p').at(0).text()).toEqual('01');
@@ -80,7 +80,7 @@ describe("App.js", () => {
     });
 
     describe('Life cycles', () => {
-        it('should call readFile method when component did mount', () => {
+        it('should call readFile function when component did mount', () => {
             const instance = wrapper.instance();
 
             jest.spyOn(instance, 'readFile');
@@ -106,7 +106,7 @@ describe("App.js", () => {
             expect(instance.state.data).toMatchObject(defaultData);
         });
 
-        it('should reject readFile method when component did mount', async () => {
+        it('should have undefined data if fetch method did not have response', async () => {
             global.fetch = unMockedFetch;
             global.fetch = () =>
                 Promise.resolve({
@@ -146,7 +146,7 @@ describe("App.js", () => {
             expect(instance.state.time.seconds).toBe(44);
         });
 
-        it('should add zero to numbers when addPad function did call', () => {
+        it('should add zero to the string when addPad function did call', () => {
             let hours = '6';
             hours = wrapper.instance().addPad(hours);
 

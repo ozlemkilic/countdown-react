@@ -40,6 +40,10 @@ body {
         grid-template-columns: repeat(5, 1fr);
         margin: 32px 0;
         grid-gap: 32px;
+        div {
+          display: grid;
+          grid-template-rows: 1fr min-content;
+        }
         p {
           margin: 0;
         }
