@@ -1,6 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
-import App from "./App";
+import App from "../App";
+import Countdown from "../components/Countdown";
 
 describe("App.js", () => {
     const defaultData = {
@@ -33,6 +34,10 @@ describe("App.js", () => {
 
     it('should render', () => {
         expect(wrapper).not.toBeNull();
+    });
+
+    it('should render child component', () => {
+        expect(wrapper.find(Countdown).exists()).toBeTruthy();
     });
 
     describe('DOM', () => {
@@ -69,14 +74,6 @@ describe("App.js", () => {
 
             expect(wrapper.find('.description p').text()).toContain('10');
         });
-
-        it('should have correct duration in countdown', async () => {
-            wrapper.setState({ time: { hours: 1, minutes: 35, seconds: 20 } });
-
-            expect(wrapper.find('.hours p').at(0).text()).toEqual('01');
-            expect(wrapper.find('.minutes p').at(0).text()).toEqual('35');
-            expect(wrapper.find('.seconds p').at(0).text()).toEqual('20');
-        });
     });
 
     describe('Life cycles', () => {
@@ -87,13 +84,6 @@ describe("App.js", () => {
             instance.componentDidMount();
 
             expect(instance.readFile).toHaveBeenCalledTimes(1);
-        });
-
-        it('should clear interval when component did unmount', () => {
-            jest.useFakeTimers();
-            wrapper.instance().componentWillUnmount();
-
-            expect(clearInterval).toHaveBeenCalledWith(expect.any(Number));
         });
     });
 
@@ -120,37 +110,6 @@ describe("App.js", () => {
             expect(instance.state.data).toBe(undefined);
 
             global.fetch = mockedFetch;
-        });
-
-        it('should change time state correctly when startTimer function did call', () => {
-            const instance = wrapper.instance();
-
-            wrapper.setState({ time: { hours: 0, minutes: 0, seconds: 0 } });
-            instance.startTimer();
-
-            expect(instance.state.isCompleted).toBeTruthy();
-
-            wrapper.setState({ time: { hours: 10, minutes: 0, seconds: 0 } });
-            instance.startTimer();
-
-            expect(instance.state.time.hours).toBe(9);
-
-            wrapper.setState({ time: { hours: 9, minutes: 58, seconds: 0 } });
-            instance.startTimer();
-
-            expect(instance.state.time.minutes).toBe(57);
-
-            wrapper.setState({ time: { hours: 9, minutes: 58, seconds: 45 } });
-            instance.startTimer();
-
-            expect(instance.state.time.seconds).toBe(44);
-        });
-
-        it('should add zero to the string when addPad function did call', () => {
-            let hours = '6';
-            hours = wrapper.instance().addPad(hours);
-
-            expect(hours).toEqual('06');
         });
     });
 });
