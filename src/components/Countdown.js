@@ -41,11 +41,9 @@ const Countdown = (props) => {
     }, [props.durationHour]);
 
     useEffect(() => {
-        if (typeof props.durationHour === 'object' && Object.keys(props.durationHour).length !== 0) {
-            intervalId = setInterval(() => startTimer(), 1000);
+        intervalId = setInterval(() => startTimer(), 1000);
 
-            window.localStorage.setItem('time', JSON.stringify(time));
-        }
+        window.localStorage.setItem('time', JSON.stringify(time));
 
         return () => clearInterval(intervalId);
     }, [time]);
