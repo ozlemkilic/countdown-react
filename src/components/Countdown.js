@@ -4,7 +4,7 @@ const Countdown = (props) => {
     let intervalId = null;
     const timeFromStorage = JSON.parse(window.localStorage.getItem('time')) || {};
     const defaultTimeData = {
-        hours: timeFromStorage.hours || props.durationHour.duration_hour || 0,
+        hours: timeFromStorage.hours || props.durationHour || 0,
         minutes: timeFromStorage.minutes || 0,
         seconds: timeFromStorage.seconds || 0
     };
